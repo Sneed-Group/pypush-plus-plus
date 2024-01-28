@@ -9,6 +9,7 @@ It can currently register as a new device on an Apple ID, set up encryption keys
 
 ## Installation
 It's pretty self explanatory:
+If on windows, open terminal as admin,
 1. `git clone https://github.com/JJTech0130/pypush`
 2. If on a Mac, ensure `cmake` is installed. Otherwise, run `brew install cmake`
 3. `pip3 install -r requirements.txt`
