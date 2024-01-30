@@ -15,7 +15,7 @@ It's pretty self explanatory:
 4. `python3 ./demo.py`
 
 ## Troubleshooting
-If you have any issues, please join [the Discord](https://discord.gg/BVvNukmfTC) and ask for help.
+If you have any issues, please feel free to debug and contribute to the code! :-)
 
 ## Operation
 `pypush` will generate a `config.json` in the repository when you run demo.py. DO NOT SHARE THIS FILE.
