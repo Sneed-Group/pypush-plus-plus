@@ -9,6 +9,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.x509.oid import NameOID
+from sys import platform
 
 import bags
 
@@ -18,6 +19,9 @@ from ._helpers import PROTOCOL_VERSION, USER_AGENT, KeyPair
 import logging
 logger = logging.getLogger("ids")
 
+
+auth_token =  "" # function should return a rsa private key
+realm_user_id = "" # function should return a x509 public key
 
 def _auth_token_request(username: str, password: str) -> any:
     # Turn the PET into an auth token
@@ -48,13 +52,13 @@ def _auth_token_request(username: str, password: str) -> any:
 def get_auth_token(
     username: str, password: str, factor_gen: callable = None
 ) -> tuple[str, str]:
-    from sys import platform
     result = _auth_token_request(username, password)
     
-    
-    auth_token = rsa.generate_private_key(public_exponent=65537,key_size=2048)
-    
-    realm_user_id = auth_token.public_key()
+    auth_token =  rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048,
+    ) # rsa private key
+    realm_user_id = _generate_csr(auth_token) # x509 public key
     # else:
     #     logger.debug("Using old-style authentication")
     #     # Make the request without the 2FA code to make the prompt appear
@@ -108,15 +112,15 @@ def get_auth_cert(user_id, token) -> KeyPair:
     )
     body = {
         "authentication-data": {"auth-token": token},
-        "csr": b64decode(_generate_csr(private_key)),
+        "csr": realm_user_id,
         "realm-user-id": user_id,
     }
 
-    body = plistlib.dumps(body)
+    #body = plistlib.dumps(body)
 
     priv = auth_token
-    x509cert = _generate_csr(auth_token)
     pub = realm_user_id
+    x509cert = realm_user_id
     
     r = {"cert": x509cert}
 
@@ -158,4 +162,4 @@ def get_handles(push_token, user_id: str, auth_key: KeyPair, push_key: KeyPair):
 
     #logger.debug(f"User {user_id} has handles {r['handles']}")
     #return [handle["uri"] for handle in r["handles"]]
-    return [priv, pub, x509cert]
+    return [realm_user_id]
