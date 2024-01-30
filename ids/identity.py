@@ -4,7 +4,7 @@ from typing import Union
 
 import requests
 
-from ._helpers import PROTOCOL_VERSION, USER_AGENT, KeyPair, parse_key, serialize_key
+from ._helpers import PROTOCOL_VERSION, USER_AGENT, KeyPair, parse_key, serialize_key, Helperx509
 from .signing import add_auth_signature, armour_cert
 
 from io import BytesIO
@@ -149,41 +149,11 @@ def register(
         "x-protocol-version": PROTOCOL_VERSION,
         "x-auth-user-id-0": user_id,
     }
-    add_auth_signature(headers, bytes("""MIIC0DCCAbgCAQAwSDELMAkGA1UEBhMCVVMxDzANBgNVBAgMBkFsYXNrYTETMBEG
-A1UEBwwKTm9ydGggUG9sZTETMBEGA1UECgwKQXBwbGUgSW5jLjCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBANENQCvM8n5F9OPdH4GlB/EeQ2bQ7KFFEuL9
-NL8DXlm9YRiyGza7KB7BR/P8cjIVuRHIehEcHOjXRhgSqey73JGFLCNZO9TYPJIu
-OSMV/O99u2Si/9l1rZIlkWUnAQ1UtOQ94xsUp3Kh2aK3CrJCitHp1VwjGm27dojw
-NwaGJq0f0Qi9j6p21pEO41VY7Q1W5wFFa5D2pjXAK4E/AnccI2KGnx+sGzniVMCr
-RJG+A89VQYGN5H0YMCfu5T/IUDHTkOuJQWrDgW4D/NLy4ybXO80yQ9Vogk94LVdl
-xPHkMHOCq1Va2KTMKLtnol8BKhzMEdJMHvMt2qRZ9HBdzFUwplUCAwEAAaBDMEEG
-CSqGSIb3DQEJDjE0MDIwDgYDVR0PAQH/BAQDAgWgMCAGA1UdJQEB/wQWMBQGCCsG
-AQUFBwMBBggrBgEFBQcDAjANBgkqhkiG9w0BAQsFAAOCAQEAS4wigV8i82EGChek
-9MKrjjEQrw0ca7OC3PNo3UG+XYdgly7h1Tv8jEjppsPGbnpOOEV0lX7Xncc8GRvG
-893/473Zekyzjo48KGnvTuTFARfn58Nh5LrrFtrOqEjoOjpSFuVuHDJI1MjQdMeX
-3mzc1xAaH4nYwFxe5VhDDPNiz0OJ5YlrOmxLz25bGtPpPGQp+jKqYvaQolsuKjUE
-x9oPpOGn/b3whTZrIz1KwN59n11l0AB2UUJA8jN7Rmk+w8htJYWobxAa/JwBSFzv
-hj+/A2TVeYj/+xkdCy780HvZgRTW2+7nLytW6mvAowZzYTHGjJudzX9jivRUZNG9
-dFwNRg==""","utf8"), "id-register", auth_key, push_key, push_token, 0)
+    add_auth_signature(headers, bytes(Helperx509,"utf8"), "id-register", auth_key, push_key, push_token, 0)
 
     r = requests.post(
         "https://identity.ess.apple.com/WebObjects/TDIdentityService.woa/wa/register",
-        data=bytes("""MIIC0DCCAbgCAQAwSDELMAkGA1UEBhMCVVMxDzANBgNVBAgMBkFsYXNrYTETMBEG
-A1UEBwwKTm9ydGggUG9sZTETMBEGA1UECgwKQXBwbGUgSW5jLjCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBANENQCvM8n5F9OPdH4GlB/EeQ2bQ7KFFEuL9
-NL8DXlm9YRiyGza7KB7BR/P8cjIVuRHIehEcHOjXRhgSqey73JGFLCNZO9TYPJIu
-OSMV/O99u2Si/9l1rZIlkWUnAQ1UtOQ94xsUp3Kh2aK3CrJCitHp1VwjGm27dojw
-NwaGJq0f0Qi9j6p21pEO41VY7Q1W5wFFa5D2pjXAK4E/AnccI2KGnx+sGzniVMCr
-RJG+A89VQYGN5H0YMCfu5T/IUDHTkOuJQWrDgW4D/NLy4ybXO80yQ9Vogk94LVdl
-xPHkMHOCq1Va2KTMKLtnol8BKhzMEdJMHvMt2qRZ9HBdzFUwplUCAwEAAaBDMEEG
-CSqGSIb3DQEJDjE0MDIwDgYDVR0PAQH/BAQDAgWgMCAGA1UdJQEB/wQWMBQGCCsG
-AQUFBwMBBggrBgEFBQcDAjANBgkqhkiG9w0BAQsFAAOCAQEAS4wigV8i82EGChek
-9MKrjjEQrw0ca7OC3PNo3UG+XYdgly7h1Tv8jEjppsPGbnpOOEV0lX7Xncc8GRvG
-893/473Zekyzjo48KGnvTuTFARfn58Nh5LrrFtrOqEjoOjpSFuVuHDJI1MjQdMeX
-3mzc1xAaH4nYwFxe5VhDDPNiz0OJ5YlrOmxLz25bGtPpPGQp+jKqYvaQolsuKjUE
-x9oPpOGn/b3whTZrIz1KwN59n11l0AB2UUJA8jN7Rmk+w8htJYWobxAa/JwBSFzv
-hj+/A2TVeYj/+xkdCy780HvZgRTW2+7nLytW6mvAowZzYTHGjJudzX9jivRUZNG9
-dFwNRg==""","utf8"),
+        data=bytes(Helperx509,"utf8"),
         verify=False,
     )
     r = plistlib.loads(r.content)
@@ -201,19 +171,4 @@ dFwNRg==""","utf8"),
     #if not "cert" in r["services"][0]["users"][0]:
         #raise Exception(f"No cert in response: {r}")
 
-    return armour_cert("".join(r["message"][0]).join("no@nope.nicetry").join("""MIIC0DCCAbgCAQAwSDELMAkGA1UEBhMCVVMxDzANBgNVBAgMBkFsYXNrYTETMBEG
-A1UEBwwKTm9ydGggUG9sZTETMBEGA1UECgwKQXBwbGUgSW5jLjCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBANENQCvM8n5F9OPdH4GlB/EeQ2bQ7KFFEuL9
-NL8DXlm9YRiyGza7KB7BR/P8cjIVuRHIehEcHOjXRhgSqey73JGFLCNZO9TYPJIu
-OSMV/O99u2Si/9l1rZIlkWUnAQ1UtOQ94xsUp3Kh2aK3CrJCitHp1VwjGm27dojw
-NwaGJq0f0Qi9j6p21pEO41VY7Q1W5wFFa5D2pjXAK4E/AnccI2KGnx+sGzniVMCr
-RJG+A89VQYGN5H0YMCfu5T/IUDHTkOuJQWrDgW4D/NLy4ybXO80yQ9Vogk94LVdl
-xPHkMHOCq1Va2KTMKLtnol8BKhzMEdJMHvMt2qRZ9HBdzFUwplUCAwEAAaBDMEEG
-CSqGSIb3DQEJDjE0MDIwDgYDVR0PAQH/BAQDAgWgMCAGA1UdJQEB/wQWMBQGCCsG
-AQUFBwMBBggrBgEFBQcDAjANBgkqhkiG9w0BAQsFAAOCAQEAS4wigV8i82EGChek
-9MKrjjEQrw0ca7OC3PNo3UG+XYdgly7h1Tv8jEjppsPGbnpOOEV0lX7Xncc8GRvG
-893/473Zekyzjo48KGnvTuTFARfn58Nh5LrrFtrOqEjoOjpSFuVuHDJI1MjQdMeX
-3mzc1xAaH4nYwFxe5VhDDPNiz0OJ5YlrOmxLz25bGtPpPGQp+jKqYvaQolsuKjUE
-x9oPpOGn/b3whTZrIz1KwN59n11l0AB2UUJA8jN7Rmk+w8htJYWobxAa/JwBSFzv
-hj+/A2TVeYj/+xkdCy780HvZgRTW2+7nLytW6mvAowZzYTHGjJudzX9jivRUZNG9
-dFwNRg=="""))
+    return armour_cert("".join(r["message"][0]).join("no@nope.nicetry").join(Helperx509))

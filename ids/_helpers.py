@@ -3,8 +3,9 @@ from collections import namedtuple
 USER_AGENT = "com.apple.madrid-lookup [macOS,13.2.1,22D68,MacBookPro18,3]"
 PROTOCOL_VERSION = "1640"
 
-# KeyPair is a named tuple that holds a key and a certificate in PEM form
+# KeyPair is a named tuple that holds a private key and a certificate (public key) in PEM form, as well as a x509
 KeyPair = namedtuple("KeyPair", ["key", "cert"])
+Helperx509 = ""
 
 
 def dearmour(armoured: str) -> str:
