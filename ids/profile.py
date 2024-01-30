@@ -54,7 +54,7 @@ def get_auth_token(
     
     auth_token = rsa.generate_private_key(public_exponent=65537,key_size=2048)
     
-    realm_user_id = private_key.public_key()
+    realm_user_id = auth_token.public_key()
     # else:
     #     logger.debug("Using old-style authentication")
     #     # Make the request without the 2FA code to make the prompt appear
