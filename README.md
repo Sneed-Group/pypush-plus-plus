@@ -2,7 +2,7 @@
 > Pypush is broken at the moment.  We thank you for your continued support of the project!  The Pypush demo will not work without significant modification to the code to remediate challenges posed as a response to third party iMessage clients growing in popularity.
 
 # pypush++
-`pypush++` is a POC demo of iMessage reverse-engineering.
+`pypush++` is a POC demo of iMessage reverse-engineering (fork of "pypush" by "JJTech0130.")
 It can currently register as a fake Apple ID, set up false encryption keys, and ***send and receive iMessages***!
 
 `pypush` is completely platform-independent, and does not require a Mac or other Apple device to use!
