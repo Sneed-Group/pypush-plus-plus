@@ -36,5 +36,3 @@ This repository contains a sample [`data.plist`](https://github.com/JJTech0130/p
 
 ## Licensing
 This project is licensed under the terms of the [SSPL](https://www.mongodb.com/licensing/server-side-public-license). Portions of this project are based on [macholibre by Aaron Stephens](https://github.com/aaronst/macholibre/blob/master/LICENSE) under the Apache 2.0 license.
-
-This project has been purchased by [Beeper](https://github.com/beeper), please contact them with any questions about licensing.
