@@ -7,3 +7,4 @@ pbkdf2
 unicorn
 rich
 prompt_toolkit
+trio

@@ -28,6 +28,7 @@ logger = logging.getLogger("imessage")
 
 NORMAL_NONCE = b"\x00" * 15 + b"\x01"  # This is always used as the AES nonce
 
+bundled_payloads = []
 
 class BalloonBody:
     """Represents the special parts of message extensions etc."""
@@ -257,20 +258,34 @@ class iMessageUser:
         Returns None if no conforming notification is found
         """
 
-        def check_response(x):
-            if x[0] != 0x0A:
-                return False
-            if apns._get_field(x[1], 2) != sha1("com.apple.madrid".encode()).digest():
-                return False
-            resp_body = apns._get_field(x[1], 3)
-            if resp_body is None:
-                # logger.debug("Rejecting madrid message with no body")
-                return False
-            resp_body = plistlib.loads(resp_body)
-            if "P" not in resp_body:
-                # logger.debug(f"Rejecting madrid message with no payload : {resp_body}")
-                return False
-            return True
+    #def check_response(x):
+        #if x[0] != 0x0A:
+            #return False
+        #if apns._get_field(x[1], 2) != sha1("com.apple.madrid".encode()).digest():
+            #return False
+        #resp_body = apns._get_field(x[1], 3)
+        #if resp_body is None:
+            # logger.debug("Rejecting madrid message with no body")
+            #return False
+        #resp_body = plistlib.loads(resp_body)
+        #if "P" not in resp_body:
+            # logger.debug(f"Rejecting madrid message with no payload : {resp_body}")
+            #return False
+        #return True
+
+    def check_response(x):
+        if x[0] != 0x0A:
+            return False
+        if apns._get_field(x[1], 2) != sha1("com.apple.madrid".encode()).digest():
+            return False
+        resp_body = apns._get_field(x[1], 3)
+        if resp_body is None:
+            return False
+        resp_body = plistlib.loads(resp_body)
+        if "c" not in resp_body or resp_body["c"] != 255:
+            return False
+        return True
+
 
         payload = self.connection.incoming_queue.pop_find(check_response)
         if payload is None:
@@ -494,7 +509,6 @@ class iMessageUser:
         raw = message.to_raw()
         import base64
 
-        bundled_payloads = []
         for participant in message.participants:
             participant = participant.lower()
             for push_token in self.USER_CACHE[participant]:
@@ -530,6 +544,7 @@ class iMessageUser:
             "sP": message.sender,
         }
 
+
         body = plistlib.dumps(body, fmt=plistlib.FMT_BINARY)
 
         self.connection.send_message("com.apple.madrid", body, msg_id)
@@ -537,29 +552,29 @@ class iMessageUser:
         # This code can check to make sure we got a success response, but waiting for the response is annoying,
         # so for now we just YOLO it and assume it worked
 
-        # def check_response(x):
-        #     if x[0] != 0x0A:
-        #         return False
-        #     if apns._get_field(x[1], 2) != sha1("com.apple.madrid".encode()).digest():
-        #         return False
-        #     resp_body = apns._get_field(x[1], 3)
-        #     if resp_body is None:
-        #         return False
-        #     resp_body = plistlib.loads(resp_body)
-        #     if "c" not in resp_body or resp_body["c"] != 255:
-        #         return False
-        #     return True
-        
+         #def check_response(x):
+             #if x[0] != 0x0A:
+                 #return False
+             #if apns._get_field(x[1], 2) != sha1("com.apple.madrid".encode()).digest():
+                 #return False
+             #resp_body = apns._get_field(x[1], 3)
+             #if resp_body is None:
+                 #return False
+             #resp_body = plistlib.loads(resp_body)
+             #if "c" not in resp_body or resp_body["c"] != 255:
+                 #return False
+             #return True
 
-        # num_recv = 0
-        # while True:
-        #     if num_recv == len(bundled_payloads):
-        #         break
-        #     payload = self.connection.incoming_queue.wait_pop_find(check_response)
-        #     if payload is None:
-        #         continue
+num_recv = 0
+    
+while True:
+    if num_recv == len(bundled_payloads):
+        break
+    payload = self.connection.incoming_queue.wait_pop_find(check_response)
+    if payload is None:
+        continue
 
-        #     resp_body = apns._get_field(payload[1], 3)
-        #     resp_body = plistlib.loads(resp_body)
-        #     logger.error(resp_body)
-        #     num_recv += 1
+    resp_body = apns._get_field(payload[1], 3)
+    resp_body = plistlib.loads(resp_body)
+    logger.error(resp_body)
+    num_recv += 1

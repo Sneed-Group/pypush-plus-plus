@@ -178,12 +178,22 @@ while True:
         if msg == 'help' or msg == 'h':
             print('help (h): show this message')
             print('quit (q): quit')
-            #print('send (s) [recipient] [message]: send a message')
-            print('filter (f) [recipient]: set the current chat')
+            print('send (s) [recipient] [message]: send a message')
+            #print('filter (f) [recipient]: set the current chat')
             print('effect (e): adds an iMessage effect to the next sent message')
             print('note: recipient must start with tel: or mailto: and include the country code')
             print('handle <handle>: set the current handle (for sending messages)')
             print('\\: escape commands (will be removed from message)')
+        elif msg.startswith('send') or msg.startswith('s'):
+            msg = msg.split(' ')
+            if len(msg) < 3:
+                print('send [recipient] [message]')
+            else:
+                im.send(imessage.iMessage(
+                    text=' '.join(msg[2:]),
+                    participants=[msg[1], user.handles[0]],
+                    #sender=user.handles[0]
+                ))
         elif msg == 'quit' or msg == 'q':
             break
         elif msg == 'effect' or msg == 'e' or msg.startswith("effect ") or msg.startswith("e "):
@@ -193,14 +203,14 @@ while True:
             else:
                 print(f"next message will be sent with [{msg[1]}]")
                 current_effect = msg[1]
-        elif msg == 'filter' or msg == 'f' or msg.startswith('filter ') or msg.startswith('f '):
+        #elif msg == 'filter' or msg == 'f' or msg.startswith('filter ') or msg.startswith('f '):
             # Set the curernt chat
-            msg = msg.split(' ')
-            if len(msg) < 2 or msg[1] == '':
-                print('filter [recipients]')
-            else:
-                print(f'Filtering to {[fixup_handle(h) for h in msg[1:]]}')
-                current_participants = [fixup_handle(h) for h in msg[1:]]
+            #msg = msg.split(' ')
+            #if len(msg) < 2 or msg[1] == '':
+                #print('filter [recipients]')
+            #else:
+                #print(f'Filtering to {[fixup_handle(h) for h in msg[1:]]}')
+                #current_participants = [fixup_handle(h) for h in msg[1:]]
         elif msg == 'handle' or msg.startswith('handle '):
             msg = msg.split(' ')
             if len(msg) < 2 or msg[1] == '':
@@ -234,15 +244,4 @@ while True:
             print('No chat selected, use help for help')
 
     time.sleep(0.1)
-        
-        # elif msg.startswith('send') or msg.startswith('s'):
-        #     msg = msg.split(' ')
-        #     if len(msg) < 3:
-        #         print('send [recipient] [message]')
-        #     else:
-        #         im.send(imessage.iMessage(
-        #             text=' '.join(msg[2:]),
-        #             participants=[msg[1], user.handles[0]],
-        #             #sender=user.handles[0]
-        #         ))
-        
+
