@@ -63,8 +63,10 @@ if CONFIG.get("auth", {}).get("cert") is not None:
     handles = CONFIG["auth"]["handles"]
     user.restore_authentication(auth_keypair, user_id, handles)
 else:
-    username = input("Username: ")
-    password = getpass("Password: ")
+    #username = input("Username: ")
+    #password = getpass("Password: ")
+    username = input("Fake username: ")
+    password = ""
 
     user.authenticate(username, password)
 
