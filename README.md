@@ -1,9 +1,9 @@
 > [!WARNING]
-> Pypush is broken at the moment.  We thank you for your continued support of the project!  The Pypush demo will not work without significant modification to the code to remediate challenges posed as a response to third party iMessage clients growing in popularity.
+> Pypush is broken at the moment.  We thank you for your continued support of the project!  The Pypush demo will not work without significant modification to the code to remediate challenges posed as a response to third party iMessage clients growing in popularity. Also, this is meant for educational purposes ONLY. Do NOT use for evil!
 
 # pypush++
 `pypush++` is a POC demo of iMessage reverse-engineering (fork of "pypush" by "JJTech0130.")
-It can currently register as a fake Apple ID, set up false encryption keys, and ***send and receive iMessages***!
+It can currently register as a fake Apple ID, set up false encryption keys, and (soon) ***send and receive iMessages!*** Basically, like a cracked Minecraft client but for iMessage!
 
 `pypush` is completely platform-independent, and does not require a Mac or other Apple device to use!
 
